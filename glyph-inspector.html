@@ -163,6 +163,8 @@ function displayGlyphData(glyphIndex) {
         html += 'path:<br><pre>  ' + glyph.path.commands.map(pathCommandToString).join('\n  ') + '\n</pre>';
     }
     container.innerHTML = html;
+
+	console.log('Glyph Data:', glyph);
 }
 
 var arrowLength = 10,
