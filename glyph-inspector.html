@@ -422,6 +422,8 @@ function quickLoadFont(fontName) {
 			console.error('Could not quick load font ' + fontName + '\n', err);
 		} else {
 			font = f;
+			showErrorMessage('');
+			onFontLoaded(font);
 		}
 	});
 }
