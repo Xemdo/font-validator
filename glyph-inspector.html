@@ -160,6 +160,7 @@ function displayGlyphData(glyphIndex) {
                 }
             }).join('</li><li>') + '</li></ul>';
     } else if (glyph.path) {
+		html += 'svg tag (see HTML) <pre>' + glyph.path.toSVG(2) + '</pre>';
         html += 'path:<br><pre>  ' + glyph.path.commands.map(pathCommandToString).join('\n  ') + '\n</pre>';
     }
     container.innerHTML = html;
