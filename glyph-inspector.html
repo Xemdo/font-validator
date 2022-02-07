@@ -33,6 +33,13 @@
     <span class="info" id="font-name">Roboto-Black</span>
     <div id="message"></div>
 
+	<br>
+	Quick Load:
+	<button onclick="quickLoadFont('Leland')">Leland</button>
+	<button onclick="quickLoadFont('LelandText')">Leland Text</button>
+	<button onclick="quickLoadFont('Bravura')">Bravura</button>
+	<button onclick="quickLoadFont('BravuraText')">Bravura Text</button>
+
     <hr>
 
     <div>
@@ -407,6 +414,16 @@ function onFontLoaded(font) {
     displayGlyphPage(0);
     displayGlyph(-1);
     displayGlyphData(-1);
+}
+
+function quickLoadFont(fontName) {
+	opentype.load('fonts/' + fontName + '.otf', (err, f) => {
+		if (err) {
+			console.error('Could not quick load font ' + fontName + '\n', err);
+		} else {
+			font = f;
+		}
+	});
 }
 
 function onReadFile(e) {
