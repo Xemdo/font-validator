@@ -40,6 +40,12 @@
         <br>
         <div id="glyph-list-end"></div>
     </div>
+
+	<div>
+		<label><input type="checkbox" onchange="drawPointsChanged(this)" checked="checked" title="On-curve points are blue, off-curve points are red.">Draw Points</label>
+		<label><input type="checkbox" onchange="drawArrowsChanged(this)" checked="checked" title="Arrows are drawn at the end of each contour">Draw Arrows</label>
+	</div>
+
     <div style="position: relative">
         <div id="glyph-display">
             <canvas id="glyph-bg" width="500" height="500"></canvas>
@@ -72,6 +78,8 @@ var cellCount = 100,
     pixelRatio = window.devicePixelRatio || 1;
 
 var pageSelected, pageDisplayed, font, fontScale, fontSize, fontBaseline, glyphScale, glyphSize, glyphBaseline, glyphSelected, numGlyphs;
+
+var drawPoints = true, drawArrows = true;
 
 function enableHighDPICanvas(canvas) {
     if (typeof canvas === 'string') {
@@ -194,7 +202,7 @@ function drawArrow(ctx, x1, y1, x2, y2) {
  * This function is Path.prototype.draw with an arrow
  * at the end of each contour.
  */
-function drawPathWithArrows(ctx, path) {
+function drawPath(ctx, path, withArrows) {
     var i, cmd, x1, y1, x2, y2;
     var arrows = [];
     ctx.beginPath();
@@ -234,9 +242,22 @@ function drawPathWithArrows(ctx, path) {
         ctx.stroke();
     }
     ctx.fillStyle = '#000000';
-    arrows.forEach(function(arrow) {
-        drawArrow.apply(null, arrow);
-    });
+	
+	if (withArrows) {
+		arrows.forEach(function(arrow) {
+			drawArrow.apply(null, arrow);
+		});
+	}
+}
+
+function drawPointsChanged(e) {
+	drawPoints = e.checked;
+	displayGlyph(glyphSelected);
+}
+
+function drawArrowsChanged(e) {
+	drawArrows = e.checked;
+	displayGlyph(glyphSelected);
 }
 
 function displayGlyph(glyphIndex) {
@@ -267,8 +288,8 @@ function displayGlyph(glyphIndex) {
     path.fill = '#808080';
     path.stroke = '#000000';
     path.strokeWidth = 1.5;
-    drawPathWithArrows(ctx, path);
-    glyph.drawPoints(ctx, x0, glyphBaseline, glyphSize);
+	drawPath(ctx, path, drawArrows);
+	if (drawPoints) glyph.drawPoints(ctx, x0, glyphBaseline, glyphSize);
 
 	if (glyphSelected && (glyphSelected >= pageSelected * 100 && glyphSelected < (pageSelected + 1) * 100))
 		renderGlyphItem(document.getElementById('g' + Math.abs(pageSelected * 100 - glyphSelected)), glyphSelected, false); // Render old one to remove indicator
